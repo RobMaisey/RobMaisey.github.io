@@ -3,607 +3,413 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>WorkFit Templates: Time Travel</title>
+<title>WorkFit Tools: Time Travel</title>
 <meta name="description" content="An interactive session tool mapping how the brain processes past, present, and future. By Rob Maisey, WorkFit.">
-<meta property="og:title" content="WorkFit Templates: Time Travel">
+<meta property="og:title" content="WorkFit Tools: Time Travel">
 <meta property="og:description" content="An interactive session tool mapping how the brain processes past, present, and future.">
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://sharezen.ca/workfit/time-travel">
+<meta property="og:url" content="https://robmaisey.github.io/workfit/time-travel">
 <meta name="author" content="Rob Maisey, ShareZen Consulting">
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap');
 
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
 
-  :root {
-    --bg: #0e0e10;
-    --surface: #18181b;
-    --surface-hover: #1f1f23;
-    --border: #2a2a2e;
-    --text-primary: #f0f0f2;
-    --text-secondary: #c4c4cc;
-    --text-tertiary: #7a7a88;
-    --past: #a194f0;
-    --past-bg: rgba(161,148,240,0.10);
-    --present: #f06b6a;
-    --present-bg: rgba(240,107,106,0.10);
-    --future: #3cd9a0;
-    --future-bg: rgba(60,217,160,0.10);
-    --accent: #f06b6a;
-  }
+:root {
+  --bg: #0e0e10;
+  --surface: #18181b;
+  --surface-hover: #1f1f23;
+  --border: #2a2a2e;
+  --text-primary: #f0f0f2;
+  --text-secondary: #c4c4cc;
+  --text-tertiary: #7a7a88;
+  --past: #a194f0;
+  --past-bg: rgba(161,148,240,0.10);
+  --present: #f06b6a;
+  --present-bg: rgba(240,107,106,0.10);
+  --future: #3cd9a0;
+  --future-bg: rgba(60,217,160,0.10);
+  --accent: #f06b6a;
+}
 
-  body {
-    background: var(--bg);
-    color: var(--text-primary);
-    font-family: 'DM Sans', sans-serif;
-    overflow: hidden;
-    height: 100vh;
-    width: 100vw;
-    user-select: none;
-    -webkit-user-select: none;
-    cursor: default;
-  }
+html, body {
+  background: var(--bg);
+  color: var(--text-primary);
+  font-family: 'DM Sans', sans-serif;
+  overflow: hidden;
+  height: 100%;
+  width: 100%;
+  user-select: none;
+  -webkit-user-select: none;
+  cursor: default;
+}
 
-  /* ─── INDEX SCREEN ─── */
-  #index-screen {
-    position: fixed;
-    inset: 0;
-    background: var(--bg);
-    z-index: 100;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    transition: opacity 0.4s ease, transform 0.4s ease;
-  }
-  #index-screen.hidden {
-    opacity: 0;
-    transform: scale(0.96);
-    pointer-events: none;
-  }
-  .index-title {
-    font-size: 16px;
-    font-weight: 600;
-    letter-spacing: 4px;
-    color: var(--text-tertiary);
-    margin-bottom: 48px;
-    text-transform: uppercase;
-  }
-  .index-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 300px));
-    gap: 20px;
-    max-width: 960px;
-    padding: 0 32px;
-    justify-content: center;
-  }
-  .index-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 32px 28px;
-    cursor: pointer;
-    transition: all 0.25s ease;
-    position: relative;
-    overflow: hidden;
-  }
-  .index-card:hover {
-    background: var(--surface-hover);
-    border-color: var(--accent);
-    transform: translateY(-2px);
-  }
-  .index-card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 3px;
-    background: var(--accent);
-    opacity: 0;
-    transition: opacity 0.25s;
-  }
-  .index-card:hover::before { opacity: 1; }
-  .index-card-number {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 13px;
-    color: var(--text-tertiary);
-    margin-bottom: 14px;
-    letter-spacing: 1px;
-  }
-  .index-card-title {
-    font-size: 22px;
-    font-weight: 600;
-    color: var(--text-primary);
-    margin-bottom: 8px;
-  }
-  .index-card-sub {
-    font-size: 15px;
-    color: var(--text-secondary);
-  }
-  .index-card-count {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 13px;
-    color: var(--text-tertiary);
-    margin-top: 18px;
-  }
+/* ── INDEX SCREEN ── */
+#index-screen {
+  position: fixed;
+  inset: 0;
+  background: var(--bg);
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+#index-screen.hidden { opacity: 0; transform: scale(0.96); pointer-events: none; }
 
-  /* ─── PRESENTATION AREA ─── */
-  #presentation {
-    position: fixed;
-    inset: 0;
-    display: none;
-  }
-  #presentation.active { display: block; }
+.index-title {
+  font-size: clamp(13px, 2vw, 16px);
+  font-weight: 600;
+  letter-spacing: 4px;
+  color: var(--text-tertiary);
+  margin-bottom: 40px;
+  text-transform: uppercase;
+}
+.index-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 300px));
+  gap: 16px;
+  max-width: 960px;
+  width: 100%;
+  justify-content: center;
+}
+.index-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 28px 24px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  position: relative;
+  overflow: hidden;
+}
+.index-card:hover { background: var(--surface-hover); border-color: var(--accent); transform: translateY(-2px); }
+.index-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  background: var(--accent); opacity: 0; transition: opacity 0.25s;
+}
+.index-card:hover::before { opacity: 1; }
+.index-card-number { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--text-tertiary); margin-bottom: 12px; letter-spacing: 1px; }
+.index-card-title { font-size: 20px; font-weight: 600; color: var(--text-primary); margin-bottom: 6px; }
+.index-card-sub { font-size: 14px; color: var(--text-secondary); }
+.index-card-count { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--text-tertiary); margin-top: 16px; }
 
-  .slide-track {
-    display: flex;
-    height: 100vh;
-    transition: transform 0.45s cubic-bezier(0.25, 0.1, 0.25, 1);
-  }
-  .slide {
-    min-width: 100vw;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 32px 48px 80px;
-    position: relative;
-  }
+/* ── PRESENTATION ── */
+#presentation { position: fixed; inset: 0; display: none; }
+#presentation.active { display: block; }
 
-  /* Slide header */
-  .slide-header {
-    text-align: center;
-    margin-bottom: 24px;
-    opacity: 0;
-    transform: translateY(10px);
-    transition: all 0.5s ease;
-  }
-  .slide-header.visible {
-    opacity: 1;
-    transform: translateY(0);
-  }
-  .slide-number {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 14px;
-    color: var(--text-tertiary);
-    letter-spacing: 2px;
-    margin-bottom: 6px;
-  }
-  .slide-title {
-    font-size: 28px;
-    font-weight: 700;
-    letter-spacing: 2px;
-    color: var(--text-primary);
-  }
-  .slide-subtitle {
-    font-size: 16px;
-    color: var(--text-secondary);
-    margin-top: 4px;
-  }
-  .slide-tagline {
-    font-size: 15px;
-    font-style: italic;
-    color: var(--text-tertiary);
-    margin-top: 10px;
-    letter-spacing: 0.3px;
-  }
+.slide-track { display: flex; height: 100vh; transition: transform 0.45s cubic-bezier(0.25,0.1,0.25,1); }
 
-  /* Grid table - fills available space */
-  .grid-table {
-    width: 100%;
-    max-width: 1100px;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-  }
+.slide {
+  min-width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(16px, 3vw, 32px) clamp(16px, 4vw, 48px) 80px;
+  position: relative;
+}
 
-  /* Direction arrows row */
-  .direction-row {
-    display: grid;
-    grid-template-columns: 180px 1fr 1fr 1fr;
-    gap: 8px;
-    margin-bottom: 12px;
-    opacity: 0;
-    transform: translateY(8px);
-    transition: all 0.4s ease;
-  }
-  .direction-row.visible {
-    opacity: 1;
-    transform: translateY(0);
-  }
-  .direction-label {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 12px;
-    letter-spacing: 1.5px;
-    color: var(--text-tertiary);
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .direction-label.left { justify-content: flex-end; }
-  .direction-label.right { justify-content: flex-start; }
-  .arrow-line {
-    flex: 1;
-    height: 1px;
-    background: var(--text-tertiary);
-    max-width: 80px;
-  }
+/* ── SLIDE HEADER ── */
+.slide-header {
+  text-align: center;
+  margin-bottom: clamp(16px, 2.5vh, 28px);
+  opacity: 0; transform: translateY(10px);
+  transition: all 0.5s ease;
+}
+.slide-header.visible { opacity: 1; transform: translateY(0); }
+.slide-number { font-family: 'JetBrains Mono', monospace; font-size: clamp(11px, 1.5vw, 14px); color: var(--text-tertiary); letter-spacing: 2px; margin-bottom: 4px; }
+.slide-title { font-size: clamp(20px, 3.5vw, 28px); font-weight: 700; letter-spacing: 2px; color: var(--text-primary); }
+.slide-subtitle { font-size: clamp(13px, 1.8vw, 16px); color: var(--text-secondary); margin-top: 4px; }
+.slide-tagline { font-size: clamp(12px, 1.6vw, 15px); font-style: italic; color: var(--text-tertiary); margin-top: 8px; letter-spacing: 0.3px; }
 
-  /* Column headers */
+/* ── GRID TABLE ── */
+.grid-table {
+  width: 100%;
+  max-width: 1100px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* Direction row */
+.direction-row {
+  display: grid;
+  grid-template-columns: clamp(90px, 15vw, 180px) 1fr 1fr 1fr;
+  gap: clamp(4px, 1vw, 8px);
+  margin-bottom: clamp(6px, 1.5vh, 12px);
+  opacity: 0; transform: translateY(8px);
+  transition: all 0.4s ease;
+}
+.direction-row.visible { opacity: 1; transform: translateY(0); }
+.direction-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: clamp(9px, 1.2vw, 12px);
+  letter-spacing: 1px; color: var(--text-tertiary);
+  display: flex; align-items: center; gap: 6px;
+}
+.direction-label.left { justify-content: flex-end; }
+.direction-label.right { justify-content: flex-start; }
+.arrow-line { flex: 1; height: 1px; background: var(--text-tertiary); max-width: 60px; }
+
+/* Column headers */
+.col-headers {
+  display: grid;
+  grid-template-columns: clamp(90px, 15vw, 180px) 1fr 1fr 1fr;
+  gap: clamp(4px, 1vw, 8px);
+  margin-bottom: clamp(4px, 0.8vh, 8px);
+  opacity: 0; transform: translateY(8px);
+  transition: all 0.4s ease;
+}
+.col-headers.visible { opacity: 1; transform: translateY(0); }
+.col-header {
+  padding: clamp(10px, 1.5vh, 16px) clamp(8px, 1vw, 16px);
+  border-radius: 6px;
+  font-size: clamp(12px, 1.6vw, 16px);
+  font-weight: 700; letter-spacing: clamp(1px, 0.2vw, 2px); text-align: center;
+}
+.col-header.theme { background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: var(--text-secondary); }
+.col-header.past { background: var(--past-bg); border: 1px solid rgba(161,148,240,0.25); color: var(--past); }
+.col-header.present { background: var(--present-bg); border: 1px solid rgba(240,107,106,0.25); color: var(--present); }
+.col-header.future { background: var(--future-bg); border: 1px solid rgba(60,217,160,0.25); color: var(--future); }
+
+/* Data rows */
+.data-row {
+  display: grid;
+  grid-template-columns: clamp(90px, 15vw, 180px) 1fr 1fr 1fr;
+  gap: clamp(4px, 1vw, 8px);
+  margin-bottom: clamp(3px, 0.6vh, 6px);
+  opacity: 0; transform: translateY(12px);
+  transition: all 0.45s ease;
+}
+.data-row.visible { opacity: 1; transform: translateY(0); }
+
+.cell {
+  padding: clamp(10px, 1.5vh, 18px) clamp(6px, 1vw, 16px);
+  border-radius: 5px;
+  font-size: clamp(13px, 1.8vw, 18px);
+  font-weight: 500; text-align: center;
+  transition: background 0.3s ease;
+}
+.cell.theme { background: rgba(255,255,255,0.03); color: var(--text-secondary); font-weight: 600; font-size: clamp(11px, 1.3vw, 14px); letter-spacing: 0.5px; }
+.cell.past { background: var(--past-bg); color: var(--past); }
+.cell.present { background: var(--present-bg); color: var(--present); }
+.cell.future { background: var(--future-bg); color: var(--future); }
+.cell.future.bold { font-weight: 700; }
+
+/* Footer row */
+.footer-row {
+  display: grid;
+  grid-template-columns: clamp(90px, 15vw, 180px) 1fr 1fr 1fr;
+  gap: clamp(4px, 1vw, 8px);
+  margin-top: clamp(12px, 2vh, 20px);
+  opacity: 0; transform: translateY(8px);
+  transition: all 0.4s ease;
+}
+.footer-row.visible { opacity: 1; transform: translateY(0); }
+.footer-cell {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: clamp(9px, 1.2vw, 13px);
+  font-weight: 600; letter-spacing: 1px; text-align: center; padding: 6px;
+}
+.footer-cell.no-control { color: var(--text-tertiary); }
+.footer-cell.see-index { color: var(--present); opacity: 0.7; }
+
+/* ── MOBILE: grid slides stack into cards ── */
+@media (max-width: 600px) {
+  .direction-row { display: none; }
+
   .col-headers {
-    display: grid;
-    grid-template-columns: 180px 1fr 1fr 1fr;
-    gap: 8px;
-    margin-bottom: 8px;
-    opacity: 0;
-    transform: translateY(8px);
-    transition: all 0.4s ease;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 4px;
   }
-  .col-headers.visible {
-    opacity: 1;
-    transform: translateY(0);
-  }
-  .col-header {
-    padding: 16px;
-    border-radius: 6px;
-    font-size: 16px;
-    font-weight: 700;
-    letter-spacing: 2px;
-    text-align: center;
-  }
-  .col-header.theme {
-    background: rgba(255,255,255,0.05);
-    border: 1px solid var(--border);
-    color: var(--text-secondary);
-  }
-  .col-header.past {
-    background: var(--past-bg);
-    border: 1px solid rgba(161,148,240,0.25);
-    color: var(--past);
-  }
-  .col-header.present {
-    background: var(--present-bg);
-    border: 1px solid rgba(240,107,106,0.25);
-    color: var(--present);
-  }
-  .col-header.future {
-    background: var(--future-bg);
-    border: 1px solid rgba(60,217,160,0.25);
-    color: var(--future);
-  }
+  .col-header.theme { display: none; }
 
-  /* Data rows */
   .data-row {
-    display: grid;
-    grid-template-columns: 180px 1fr 1fr 1fr;
-    gap: 8px;
-    margin-bottom: 6px;
-    opacity: 0;
-    transform: translateY(12px);
-    transition: all 0.45s ease;
-  }
-  .data-row.visible {
-    opacity: 1;
-    transform: translateY(0);
-  }
-  .cell {
-    padding: 18px 16px;
-    border-radius: 5px;
-    font-size: 18px;
-    font-weight: 500;
-    text-align: center;
-    transition: background 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin-bottom: 10px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
   }
   .cell.theme {
-    background: rgba(255,255,255,0.03);
-    color: var(--text-secondary);
-    font-weight: 600;
-    font-size: 14px;
-    letter-spacing: 0.5px;
-  }
-  .cell.past { background: var(--past-bg); color: var(--past); }
-  .cell.present { background: var(--present-bg); color: var(--present); }
-  .cell.future { background: var(--future-bg); color: var(--future); }
-  .cell.future.bold { font-weight: 700; }
-
-  /* Footer row */
-  .footer-row {
-    display: grid;
-    grid-template-columns: 180px 1fr 1fr 1fr;
-    gap: 8px;
-    margin-top: 20px;
-    opacity: 0;
-    transform: translateY(8px);
-    transition: all 0.4s ease;
-  }
-  .footer-row.visible {
-    opacity: 1;
-    transform: translateY(0);
-  }
-  .footer-cell {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 13px;
-    font-weight: 600;
-    letter-spacing: 1px;
-    text-align: center;
-    padding: 8px;
-  }
-  .footer-cell.no-control { color: var(--text-tertiary); }
-  .footer-cell.see-index { color: var(--present); opacity: 0.7; }
-
-  /* ─── INDEX CARD SLIDE ─── */
-  .index-slide-content {
-    max-width: 540px;
-    width: 100%;
-  }
-  .index-headline {
-    font-size: 38px;
-    font-weight: 700;
-    letter-spacing: 3px;
-    text-align: center;
-    color: var(--text-primary);
-    margin-bottom: 8px;
-    opacity: 0;
-    transform: translateY(10px);
-    transition: all 0.5s ease;
-  }
-  .index-headline.visible {
-    opacity: 1;
-    transform: translateY(0);
-  }
-  .index-box {
-    margin-top: 28px;
-    border: 1px solid rgba(240,107,106,0.3);
-    border-radius: 8px;
-    padding: 28px 24px;
-    background: rgba(240,107,106,0.04);
-  }
-  .index-box-header {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-    margin-bottom: 16px;
-    padding-bottom: 14px;
-    border-bottom: 1px solid rgba(240,107,106,0.15);
-    opacity: 0;
-    transition: all 0.4s ease;
-  }
-  .index-box-header.visible { opacity: 1; }
-  .index-col-label {
-    font-size: 14px;
-    font-weight: 600;
-    letter-spacing: 1.5px;
-    color: var(--present);
-    opacity: 0.7;
-    text-align: center;
-  }
-  .index-pair-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-    margin-bottom: 8px;
-    opacity: 0;
-    transform: translateY(8px);
-    transition: all 0.4s ease;
-  }
-  .index-pair-row.visible {
-    opacity: 1;
-    transform: translateY(0);
-  }
-  .index-pair-cell {
-    background: rgba(240,107,106,0.08);
-    border-radius: 5px;
-    padding: 16px;
-    text-align: center;
-    font-size: 17px;
-    font-weight: 600;
-    color: var(--present);
-  }
-  .index-control-label {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 16px;
-    margin-top: 24px;
-    opacity: 0;
-    transition: all 0.4s ease;
-  }
-  .index-control-label.visible { opacity: 1; }
-  .index-control-label span {
-    font-size: 16px;
-    font-weight: 600;
-    letter-spacing: 2px;
-    color: var(--text-secondary);
-  }
-  .index-control-line {
-    width: 50px;
-    height: 1px;
-    background: var(--text-tertiary);
-  }
-  .index-footer-note {
-    text-align: center;
-    font-size: 14px;
-    color: var(--text-tertiary);
-    margin-top: 24px;
-    line-height: 1.6;
-    opacity: 0;
-    transition: all 0.4s ease;
-  }
-  .index-footer-note.visible { opacity: 1; }
-
-  /* ─── NAV ─── */
-  .nav-bar {
-    position: fixed;
-    bottom: 28px;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    align-items: center;
-    gap: 18px;
-    padding: 12px 24px;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 40px;
-    z-index: 50;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-  }
-  .nav-bar.visible { opacity: 1; }
-  .nav-dot {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background: var(--text-tertiary);
-    cursor: pointer;
-    transition: all 0.25s ease;
-  }
-  .nav-dot.active {
-    background: var(--accent);
-    transform: scale(1.3);
-  }
-  .nav-btn {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 12px;
-    letter-spacing: 1px;
-    color: var(--text-secondary);
-    background: none;
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    padding: 8px 18px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-  }
-  .nav-btn:hover {
-    color: var(--text-primary);
-    border-color: var(--text-secondary);
-  }
-
-  .tap-hint {
-    position: fixed;
-    bottom: 88px;
-    left: 50%;
-    transform: translateX(-50%);
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 12px;
-    color: var(--text-tertiary);
-    letter-spacing: 1.5px;
-    opacity: 0;
-    transition: opacity 0.4s ease;
-    z-index: 50;
-  }
-  .tap-hint.visible { opacity: 1; }
-
-  /* ─── BRANDING FOOTER ─── */
-  .brand-footer {
-    position: fixed;
-    bottom: 14px;
-    right: 28px;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 12px;
-    letter-spacing: 1px;
-    color: var(--text-tertiary);
-    z-index: 40;
-    display: none;
-  }
-  .brand-footer.visible { display: block; }
-  .brand-footer a {
-    color: var(--text-tertiary);
-    text-decoration: none;
-    transition: color 0.2s;
-  }
-  .brand-footer a:hover { color: var(--text-secondary); }
-  /* ─── BRAIN DIAGRAM SLIDE ─── */
-  .brain-layout {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    max-width: 1100px;
-    flex: 1;
-    gap: 0;
-  }
-  .brain-views {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    position: relative;
-  }
-  .brain-svg-wrap {
-    flex: 0 0 500px;
-    height: 400px;
-    position: relative;
-  }
-  /* Each brain layer is its own SVG group that reveals independently */
-  .brain-layer {
-    opacity: 0;
-    transition: opacity 0.8s ease;
-  }
-  .brain-layer.visible {
-    opacity: 1;
-  }
-  .brain-info-cards {
-    position: absolute;
-    right: -20px;
-    top: 0;
-    bottom: 0;
-    width: 380px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    gap: 12px;
-  }
-  .brain-info-card {
-    padding: 18px 22px;
-    border-radius: 8px;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    opacity: 0;
-    transform: translateX(24px);
-    transition: all 0.6s ease;
-  }
-  .brain-info-card.visible {
-    opacity: 1;
-    transform: translateX(0);
-  }
-  .brain-info-card.c-past { border-left: 3px solid var(--past); }
-  .brain-info-card.c-present { border-left: 3px solid var(--present); }
-  .brain-info-card.c-future { border-left: 3px solid var(--future); }
-  .brain-info-title {
-    font-size: 16px;
-    font-weight: 700;
-    letter-spacing: 1.5px;
-    margin-bottom: 2px;
-  }
-  .brain-info-card.c-past .brain-info-title { color: var(--past); }
-  .brain-info-card.c-present .brain-info-title { color: var(--present); }
-  .brain-info-card.c-future .brain-info-title { color: var(--future); }
-  .brain-info-age {
-    font-family: 'JetBrains Mono', monospace;
+    background: rgba(255,255,255,0.05);
     font-size: 11px;
-    color: var(--text-tertiary);
-    margin-bottom: 6px;
-    letter-spacing: 0.5px;
+    letter-spacing: 1.5px;
+    padding: 8px 12px;
+    text-align: left;
+    border-radius: 0;
+    border-bottom: 1px solid var(--border);
   }
-  .brain-info-sub {
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--text-secondary);
-    margin-bottom: 6px;
+  .cell.past, .cell.present, .cell.future {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+    border-radius: 0;
+    font-size: 15px;
+    text-align: left;
   }
-  .brain-info-desc {
-    font-size: 14px;
-    color: var(--text-tertiary);
-    line-height: 1.5;
+  .cell.past::before { content: 'PAST'; font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 1px; opacity: 0.6; min-width: 44px; }
+  .cell.present::before { content: 'NOW'; font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 1px; opacity: 0.6; min-width: 44px; }
+  .cell.future::before { content: 'FUTURE'; font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 1px; opacity: 0.6; min-width: 44px; }
+
+  .footer-row {
+    grid-template-columns: 1fr 1fr;
+    margin-top: 8px;
   }
+  .footer-row > :first-child { display: none; }
+  .footer-cell { font-size: 9px; }
+}
+
+/* ── INDEX CARD SLIDE ── */
+.index-slide-content { max-width: 540px; width: 100%; }
+.index-headline {
+  font-size: clamp(24px, 4vw, 38px);
+  font-weight: 700; letter-spacing: 3px; text-align: center;
+  color: var(--text-primary); margin-bottom: 8px;
+  opacity: 0; transform: translateY(10px); transition: all 0.5s ease;
+}
+.index-headline.visible { opacity: 1; transform: translateY(0); }
+.index-box {
+  margin-top: 24px;
+  border: 1px solid rgba(240,107,106,0.3);
+  border-radius: 8px;
+  padding: clamp(16px, 3vw, 28px) clamp(12px, 2.5vw, 24px);
+  background: rgba(240,107,106,0.04);
+}
+.index-box-header {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+  margin-bottom: 14px; padding-bottom: 12px;
+  border-bottom: 1px solid rgba(240,107,106,0.15);
+  opacity: 0; transition: all 0.4s ease;
+}
+.index-box-header.visible { opacity: 1; }
+.index-col-label { font-size: clamp(11px, 1.4vw, 14px); font-weight: 600; letter-spacing: 1.5px; color: var(--present); opacity: 0.7; text-align: center; }
+.index-pair-row {
+  display: grid; grid-template-columns: 1fr 1fr; gap: clamp(6px, 1vw, 10px);
+  margin-bottom: 6px;
+  opacity: 0; transform: translateY(8px); transition: all 0.4s ease;
+}
+.index-pair-row.visible { opacity: 1; transform: translateY(0); }
+.index-pair-cell {
+  background: rgba(240,107,106,0.08); border-radius: 5px;
+  padding: clamp(10px, 1.5vh, 16px);
+  text-align: center; font-size: clamp(13px, 1.8vw, 17px);
+  font-weight: 600; color: var(--present);
+}
+.index-control-label {
+  display: flex; align-items: center; justify-content: center; gap: 16px;
+  margin-top: 20px; opacity: 0; transition: all 0.4s ease;
+}
+.index-control-label.visible { opacity: 1; }
+.index-control-label span { font-size: clamp(12px, 1.6vw, 16px); font-weight: 600; letter-spacing: 2px; color: var(--text-secondary); }
+.index-control-line { width: 40px; height: 1px; background: var(--text-tertiary); }
+.index-footer-note {
+  text-align: center; font-size: clamp(12px, 1.4vw, 14px);
+  color: var(--text-tertiary); margin-top: 20px; line-height: 1.6;
+  opacity: 0; transition: all 0.4s ease;
+}
+.index-footer-note.visible { opacity: 1; }
+
+/* ── BRAIN SLIDE ── */
+.brain-layout {
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  width: 100%; max-width: 1100px; flex: 1;
+}
+.brain-views {
+  display: flex; align-items: center; justify-content: center;
+  width: 100%; position: relative;
+  gap: 24px;
+}
+.brain-svg-wrap {
+  flex: 0 0 clamp(220px, 40vw, 460px);
+  height: clamp(180px, 35vw, 380px);
+}
+.brain-layer { opacity: 0; transition: opacity 0.8s ease; }
+.brain-layer.visible { opacity: 1; }
+.brain-info-cards {
+  flex: 1;
+  display: flex; flex-direction: column;
+  justify-content: center; gap: 10px;
+  max-width: 380px; min-width: 0;
+}
+.brain-info-card {
+  padding: clamp(12px, 1.8vh, 18px) clamp(12px, 1.5vw, 22px);
+  border-radius: 8px; background: var(--surface); border: 1px solid var(--border);
+  opacity: 0; transform: translateX(24px); transition: all 0.6s ease;
+}
+.brain-info-card.visible { opacity: 1; transform: translateX(0); }
+.brain-info-card.c-past { border-left: 3px solid var(--past); }
+.brain-info-card.c-present { border-left: 3px solid var(--present); }
+.brain-info-card.c-future { border-left: 3px solid var(--future); }
+.brain-info-title { font-size: clamp(13px, 1.6vw, 16px); font-weight: 700; letter-spacing: 1px; margin-bottom: 2px; }
+.brain-info-card.c-past .brain-info-title { color: var(--past); }
+.brain-info-card.c-present .brain-info-title { color: var(--present); }
+.brain-info-card.c-future .brain-info-title { color: var(--future); }
+.brain-info-age { font-family: 'JetBrains Mono', monospace; font-size: clamp(9px, 1.1vw, 11px); color: var(--text-tertiary); margin-bottom: 4px; }
+.brain-info-sub { font-size: clamp(12px, 1.4vw, 14px); font-weight: 600; color: var(--text-secondary); margin-bottom: 4px; }
+.brain-info-desc { font-size: clamp(11px, 1.3vw, 14px); color: var(--text-tertiary); line-height: 1.5; }
+
+/* Mobile brain: stack vertically */
+@media (max-width: 600px) {
+  .brain-views { flex-direction: column; gap: 16px; overflow-y: auto; }
+  .brain-svg-wrap { flex: none; width: 100%; height: clamp(160px, 50vw, 260px); }
+  .brain-info-cards { max-width: 100%; width: 100%; }
+  .brain-info-card { transform: translateX(0) translateY(16px); }
+  .brain-info-card.visible { transform: translateX(0) translateY(0); }
+}
+
+/* ── NAV ── */
+.nav-bar {
+  position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+  display: flex; align-items: center; gap: clamp(10px, 2vw, 18px);
+  padding: 10px clamp(12px, 2vw, 24px);
+  background: var(--surface); border: 1px solid var(--border); border-radius: 40px;
+  z-index: 50; opacity: 0; transition: opacity 0.3s ease;
+  max-width: calc(100vw - 32px);
+}
+.nav-bar.visible { opacity: 1; }
+.nav-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--text-tertiary); cursor: pointer; transition: all 0.25s ease; flex-shrink: 0; }
+.nav-dot.active { background: var(--accent); transform: scale(1.3); }
+.nav-btn {
+  font-family: 'JetBrains Mono', monospace; font-size: clamp(10px, 1.3vw, 12px);
+  letter-spacing: 1px; color: var(--text-secondary); background: none;
+  border: 1px solid var(--border); border-radius: 20px; padding: 6px clamp(10px, 1.5vw, 18px);
+  cursor: pointer; transition: all 0.2s ease; white-space: nowrap;
+}
+.nav-btn:hover { color: var(--text-primary); border-color: var(--text-secondary); }
+
+.tap-hint {
+  position: fixed; bottom: 76px; left: 50%; transform: translateX(-50%);
+  font-family: 'JetBrains Mono', monospace; font-size: clamp(10px, 1.3vw, 12px);
+  color: var(--text-tertiary); letter-spacing: 1.5px;
+  opacity: 0; transition: opacity 0.4s ease; z-index: 50; white-space: nowrap;
+}
+.tap-hint.visible { opacity: 1; }
+
+/* ── BRAND FOOTER ── */
+.brand-footer {
+  position: fixed; bottom: 10px; right: 16px;
+  font-family: 'JetBrains Mono', monospace; font-size: clamp(10px, 1.2vw, 12px);
+  letter-spacing: 1px; color: var(--text-tertiary); z-index: 40; display: none;
+}
+.brand-footer.visible { display: block; }
+.brand-footer a { color: var(--text-tertiary); text-decoration: none; transition: color 0.2s; }
+.brand-footer a:hover { color: var(--text-secondary); }
 </style>
 </head>
 <body>
 
 <div id="index-screen">
-  <div class="index-title">WorkFit Templates</div>
+  <div class="index-title">WorkFit Tools</div>
   <div class="index-grid" id="index-grid"></div>
 </div>
 
@@ -612,11 +418,11 @@
   <div class="tap-hint" id="tap-hint">TAP TO REVEAL</div>
   <div class="nav-bar" id="nav-bar">
     <button class="nav-btn" id="btn-index">INDEX</button>
-    <div id="nav-dots" style="display:flex;gap:10px;align-items:center;"></div>
+    <div id="nav-dots" style="display:flex;gap:8px;align-items:center;"></div>
     <button class="nav-btn" id="btn-reset">RESET</button>
   </div>
 </div>
-<div class="brand-footer" id="brand-footer">Rob Maisey · <a href="https://sharezen.ca/workfit" target="_blank">WorkFit</a></div>
+<div class="brand-footer" id="brand-footer">Rob Maisey · <a href="https://robmaisey.github.io/workfit/resources" target="_blank">WorkFit</a></div>
 
 <script>
 const DECKS = [
@@ -631,11 +437,6 @@ const DECKS = [
         subtitle: 'Three systems, one timeline',
         tagline: 'The oldest system wins unless you override it.',
         type: 'brain-diagram',
-        regions: [
-          { id: 'stem', label: 'BRAIN STEM', sub: 'Survival', desc: 'Breathing, heart rate, reflexes. Automatic. No conscious input required.', color: 'past' },
-          { id: 'limbic', label: 'LIMBIC SYSTEM', sub: 'Emotion + Memory', desc: 'Fear, reward, bonding, memory storage. Runs the present. Decides before you do.', color: 'present' },
-          { id: 'cortex', label: 'NEO CORTEX', sub: 'Thinking + Planning', desc: 'Language, reasoning, planning, impulse control. The newest system. Slowest to activate.', color: 'future' },
-        ]
       },
       {
         number: '1',
@@ -643,10 +444,10 @@ const DECKS = [
         subtitle: 'Where the person is',
         tagline: 'You are always somewhere on this grid.',
         rows: [
-          { theme: 'EXPERIENCE', past: 'Memories', present: 'Perception', future: 'Dreams' },
-          { theme: 'BRAIN REGION', past: 'Stem / Limbic', present: 'Limbic', future: 'Neo Cortex' },
-          { theme: 'MENTAL STATE', past: 'Depression', present: 'Addiction', future: 'Anxiety' },
-          { theme: 'LANGUAGE', past: 'Novel', present: 'Script', future: 'Fantasy' },
+          { theme: 'EXPERIENCE',    past: 'Memories',     present: 'Perception',     future: 'Dreams' },
+          { theme: 'BRAIN REGION',  past: 'Stem / Limbic',present: 'Limbic',         future: 'Neo Cortex' },
+          { theme: 'MENTAL STATE',  past: 'Depression',   present: 'Addiction',      future: 'Anxiety' },
+          { theme: 'LANGUAGE',      past: 'Novel',        present: 'Script',         future: 'Fantasy' },
         ]
       },
       {
@@ -655,10 +456,10 @@ const DECKS = [
         subtitle: 'How it works',
         tagline: 'Accountability asks what you will do, not what you did.',
         rows: [
-          { theme: 'THINKING', past: 'Judgement', present: 'Decision', future: 'Choice' },
-          { theme: 'OWNERSHIP', past: 'Blame', present: 'Responsibility', future: 'Accountability', futureBold: true },
-          { theme: 'AGENCY', past: 'Beliefs', present: 'Power', future: 'Control' },
-          { theme: 'STATE', past: 'Trauma', present: 'Habit', future: 'Will (limited)' },
+          { theme: 'THINKING',   past: 'Judgement', present: 'Decision',       future: 'Choice' },
+          { theme: 'OWNERSHIP',  past: 'Blame',     present: 'Responsibility', future: 'Accountability', futureBold: true },
+          { theme: 'AGENCY',     past: 'Beliefs',   present: 'Power',          future: 'Control' },
+          { theme: 'STATE',      past: 'Trauma',    present: 'Habit',          future: 'Will (limited)' },
         ]
       },
       {
@@ -667,30 +468,30 @@ const DECKS = [
         subtitle: 'Where it leads',
         tagline: 'We all make choices, including the choice to do nothing.',
         rows: [
-          { theme: 'NAVIGATION', past: 'Rearview', present: 'Reaction', future: 'Direction' },
-          { theme: 'STRATEGY', past: 'Hindsight', present: 'Adaptation', future: 'Plan' },
-          { theme: 'MOVEMENT', past: 'Drift', present: 'Drive', future: 'Purpose' },
+          { theme: 'NAVIGATION', past: 'Rearview',  present: 'Reaction',   future: 'Direction' },
+          { theme: 'STRATEGY',   past: 'Hindsight', present: 'Adaptation', future: 'Plan' },
+          { theme: 'MOVEMENT',   past: 'Drift',     present: 'Drive',      future: 'Purpose' },
         ]
       },
       {
         number: 'INDEX',
         title: 'ADAPT OR ACCEPT',
-        subtitle: '',
         type: 'index-card',
         closingLine: 'Both are choices. Neither is wrong. Only one creates change.',
         pairs: [
-          ['COMFORT', 'DISCOMFORT'],
-          ['INACTION', 'ACTION'],
-          ['SAFETY', 'RISK'],
-          ['FREEZE', 'MOVEMENT'],
+          ['COMFORT',    'DISCOMFORT'],
+          ['INACTION',   'ACTION'],
+          ['SAFETY',     'RISK'],
+          ['FREEZE',     'MOVEMENT'],
           ['RESENTMENT', 'GRATITUDE'],
-          ['VICTIM', 'AGENCY'],
+          ['VICTIM',     'AGENCY'],
         ]
       }
     ]
   },
 ];
 
+// ── ENGINE ──
 let currentDeck = null, currentSlide = 0, revealStep = 0, totalSteps = 0;
 
 function buildIndex() {
@@ -703,7 +504,7 @@ function buildIndex() {
       <div class="index-card-number">${String(i+1).padStart(2,'0')}</div>
       <div class="index-card-title">${deck.title}</div>
       <div class="index-card-sub">${deck.subtitle}</div>
-      <div class="index-card-count">${deck.slides.length} cards</div>`;
+      <div class="index-card-count">${deck.slides.length} slides</div>`;
     card.addEventListener('click', () => openDeck(deck));
     grid.appendChild(card);
   });
@@ -715,10 +516,7 @@ function openDeck(deck) {
   document.getElementById('index-screen').classList.add('hidden');
   document.getElementById('presentation').classList.add('active');
   document.getElementById('brand-footer').classList.add('visible');
-  setTimeout(() => {
-    document.getElementById('nav-bar').classList.add('visible');
-    revealCurrentSlide();
-  }, 100);
+  setTimeout(() => { document.getElementById('nav-bar').classList.add('visible'); revealCurrentSlide(); }, 100);
 }
 
 function backToIndex() {
@@ -736,156 +534,12 @@ function buildSlides(deck) {
   deck.slides.forEach((slide, si) => {
     const el = document.createElement('div');
     el.className = 'slide'; el.dataset.index = si;
-    if (slide.type === 'index-card') el.innerHTML = buildIndexCardSlide(slide);
-    else if (slide.type === 'brain-diagram') el.innerHTML = buildBrainSlide(slide);
+    if (slide.type === 'brain-diagram') el.innerHTML = buildBrainSlide(slide);
+    else if (slide.type === 'index-card') el.innerHTML = buildIndexCardSlide(slide);
     else el.innerHTML = buildGridSlide(slide);
     track.appendChild(el);
   });
   buildNavDots(deck.slides.length);
-}
-
-function buildBrainSlide(slide) {
-  return `
-    <div class="slide-header" data-reveal="header">
-      <div class="slide-title">${slide.title}</div>
-      <div class="slide-subtitle">${slide.subtitle}</div>
-      ${slide.tagline ? `<div class="slide-tagline">${slide.tagline}</div>` : ''}
-    </div>
-    <div class="brain-layout">
-      <div class="brain-views">
-        <div class="brain-svg-wrap">
-          <svg viewBox="0 0 480 400" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;">
-
-            <!-- ══ LAYER 1: BRAIN STEM + SPINAL CORD (oldest) ══ -->
-            <g class="brain-layer" data-reveal="layer-stem" data-reveal-group="stem">
-              <!-- Spinal cord -->
-              <path d="M218 340 Q215 320 216 300 Q217 285 220 270
-                       M232 340 Q235 320 234 300 Q233 285 230 270"
-                    fill="none" stroke="var(--past)" stroke-width="1.2" opacity="0.4"/>
-              <!-- Brain stem - elongated, anatomical shape -->
-              <path d="M210 275 Q200 260 198 245 Q196 230 198 218
-                       Q200 208 208 202 Q215 198 225 198
-                       Q235 198 242 202 Q250 208 252 218
-                       Q254 230 252 245 Q250 260 240 275
-                       Q235 282 225 285 Q215 282 210 275Z"
-                    fill="rgba(161,148,240,0.18)" stroke="var(--past)" stroke-width="1.8"/>
-              <!-- Pons bulge -->
-              <path d="M202 230 Q195 225 194 218 Q195 212 202 208"
-                    fill="none" stroke="var(--past)" stroke-width="1" opacity="0.5"/>
-              <path d="M248 230 Q255 225 256 218 Q255 212 248 208"
-                    fill="none" stroke="var(--past)" stroke-width="1" opacity="0.5"/>
-              <!-- Medulla texture -->
-              <path d="M215 250 Q225 245 235 250" fill="none" stroke="var(--past)" stroke-width="0.6" opacity="0.3"/>
-              <path d="M218 260 Q225 256 232 260" fill="none" stroke="var(--past)" stroke-width="0.6" opacity="0.3"/>
-              <!-- Cerebellum (back of stem area) -->
-              <path d="M248 210 Q270 200 282 215 Q290 230 280 248
-                       Q270 260 255 258 Q248 252 248 240Z"
-                    fill="rgba(161,148,240,0.12)" stroke="var(--past)" stroke-width="1.2"/>
-              <!-- Cerebellum folds -->
-              <path d="M258 220 Q270 218 278 225" fill="none" stroke="var(--past)" stroke-width="0.7" opacity="0.4"/>
-              <path d="M255 232 Q268 230 276 238" fill="none" stroke="var(--past)" stroke-width="0.7" opacity="0.4"/>
-              <path d="M254 244 Q264 242 272 248" fill="none" stroke="var(--past)" stroke-width="0.7" opacity="0.4"/>
-            </g>
-
-            <!-- ══ LAYER 2: LIMBIC SYSTEM (middle) ══ -->
-            <g class="brain-layer" data-reveal="layer-limbic" data-reveal-group="limbic">
-              <!-- Hippocampus - curved seahorse shape -->
-              <path d="M195 195 Q180 185 172 170 Q168 158 175 148
-                       Q182 140 195 142 Q205 145 210 155
-                       Q215 165 210 178 Q205 188 200 195Z"
-                    fill="rgba(240,107,106,0.2)" stroke="var(--present)" stroke-width="1.5"/>
-              <!-- Amygdala - almond shape -->
-              <path d="M172 185 Q162 178 160 168 Q160 158 168 152
-                       Q175 148 180 155 Q184 162 182 172 Q180 180 175 186Z"
-                    fill="rgba(240,107,106,0.25)" stroke="var(--present)" stroke-width="1.5"/>
-              <!-- Thalamus - oval center -->
-              <ellipse cx="220" cy="165" rx="22" ry="16"
-                    fill="rgba(240,107,106,0.15)" stroke="var(--present)" stroke-width="1.5"/>
-              <!-- Hypothalamus - small below thalamus -->
-              <ellipse cx="210" cy="188" rx="12" ry="8"
-                    fill="rgba(240,107,106,0.2)" stroke="var(--present)" stroke-width="1.2"/>
-              <!-- Cingulate gyrus arc - wraps above thalamus -->
-              <path d="M175 145 Q180 120 200 110 Q220 102 240 108 Q255 115 258 130"
-                    fill="none" stroke="var(--present)" stroke-width="2" opacity="0.6" stroke-dasharray="4 3"/>
-              <!-- Fornix arc -->
-              <path d="M195 150 Q205 130 220 125 Q235 122 245 130"
-                    fill="none" stroke="var(--present)" stroke-width="1" opacity="0.4"/>
-              <!-- Label -->
-              <text x="160" y="140" style="font-family:'JetBrains Mono',monospace;font-size:9px;fill:var(--present);opacity:0.6">amygdala</text>
-              <text x="195" y="130" style="font-family:'JetBrains Mono',monospace;font-size:9px;fill:var(--present);opacity:0.6">hippocampus</text>
-              <text x="210" y="170" text-anchor="middle" style="font-family:'JetBrains Mono',monospace;font-size:9px;fill:var(--present);opacity:0.6">thalamus</text>
-            </g>
-
-            <!-- ══ LAYER 3: NEO CORTEX (newest, outer shell) ══ -->
-            <g class="brain-layer" data-reveal="layer-cortex" data-reveal-group="cortex">
-              <!-- Main cortex outline - sagittal profile -->
-              <path d="M145 220 Q125 205 112 180 Q100 155 100 130
-                       Q100 105 112 82 Q128 58 155 42
-                       Q180 28 210 25 Q240 24 268 32
-                       Q295 42 315 65 Q332 88 335 115
-                       Q338 140 330 168 Q322 192 305 210
-                       Q290 225 272 230 Q260 233 252 228"
-                    fill="rgba(60,217,160,0.07)" stroke="var(--future)" stroke-width="2"/>
-              <!-- Frontal lobe area -->
-              <path d="M145 220 Q135 215 128 205 Q120 192 115 178"
-                    fill="none" stroke="var(--future)" stroke-width="1.8" opacity="0.6"/>
-              <!-- Major sulci / folds -->
-              <!-- Central sulcus -->
-              <path d="M220 35 Q215 55 218 75 Q220 90 215 105"
-                    fill="none" stroke="var(--future)" stroke-width="1.2" opacity="0.4"/>
-              <!-- Lateral sulcus (Sylvian fissure) -->
-              <path d="M160 170 Q180 155 205 148 Q230 142 255 148"
-                    fill="none" stroke="var(--future)" stroke-width="1.2" opacity="0.4"/>
-              <!-- Pre-central gyrus folds -->
-              <path d="M175 60 Q190 50 205 48" fill="none" stroke="var(--future)" stroke-width="0.8" opacity="0.35"/>
-              <path d="M165 80 Q182 68 200 65" fill="none" stroke="var(--future)" stroke-width="0.8" opacity="0.35"/>
-              <path d="M155 100 Q172 88 192 85" fill="none" stroke="var(--future)" stroke-width="0.8" opacity="0.35"/>
-              <!-- Post-central folds -->
-              <path d="M235 48 Q255 50 272 60" fill="none" stroke="var(--future)" stroke-width="0.8" opacity="0.35"/>
-              <path d="M240 68 Q260 70 280 82" fill="none" stroke="var(--future)" stroke-width="0.8" opacity="0.35"/>
-              <path d="M238 90 Q258 92 278 105" fill="none" stroke="var(--future)" stroke-width="0.8" opacity="0.35"/>
-              <!-- Parietal folds -->
-              <path d="M280 120 Q300 125 318 140" fill="none" stroke="var(--future)" stroke-width="0.8" opacity="0.3"/>
-              <path d="M270 145 Q290 148 310 162" fill="none" stroke="var(--future)" stroke-width="0.8" opacity="0.3"/>
-              <!-- Frontal lower folds -->
-              <path d="M140 130 Q155 120 172 118" fill="none" stroke="var(--future)" stroke-width="0.8" opacity="0.3"/>
-              <path d="M132 155 Q148 145 168 142" fill="none" stroke="var(--future)" stroke-width="0.8" opacity="0.3"/>
-              <!-- Occipital folds (back) -->
-              <path d="M298 185 Q312 178 325 185" fill="none" stroke="var(--future)" stroke-width="0.8" opacity="0.3"/>
-              <path d="M290 200 Q305 195 318 200" fill="none" stroke="var(--future)" stroke-width="0.8" opacity="0.3"/>
-              <!-- Lobe region labels (subtle) -->
-              <text x="168" y="56" style="font-family:'JetBrains Mono',monospace;font-size:8px;fill:var(--future);opacity:0.4;letter-spacing:1px">FRONTAL</text>
-              <text x="262" y="56" style="font-family:'JetBrains Mono',monospace;font-size:8px;fill:var(--future);opacity:0.4;letter-spacing:1px">PARIETAL</text>
-              <text x="300" y="200" style="font-family:'JetBrains Mono',monospace;font-size:8px;fill:var(--future);opacity:0.4;letter-spacing:1px">OCCIPITAL</text>
-              <text x="168" y="165" style="font-family:'JetBrains Mono',monospace;font-size:8px;fill:var(--future);opacity:0.4;letter-spacing:1px">TEMPORAL</text>
-            </g>
-
-          </svg>
-        </div>
-
-        <!-- Info cards positioned to the right -->
-        <div class="brain-info-cards">
-          <div class="brain-info-card c-past" data-reveal="card-stem" data-reveal-group="stem">
-            <div class="brain-info-title">BRAIN STEM + CEREBELLUM</div>
-            <div class="brain-info-age">~500 million years old</div>
-            <div class="brain-info-sub">Survival</div>
-            <div class="brain-info-desc">Breathing, heart rate, reflexes, balance. Automatic. No conscious input. Shared with reptiles. Always on.</div>
-          </div>
-          <div class="brain-info-card c-present" data-reveal="card-limbic" data-reveal-group="limbic">
-            <div class="brain-info-title">LIMBIC SYSTEM</div>
-            <div class="brain-info-age">~150 million years old</div>
-            <div class="brain-info-sub">Emotion + Memory</div>
-            <div class="brain-info-desc">Fear, reward, bonding, memory. Decides before you do. The gatekeeper. Shared with mammals. Runs the present.</div>
-          </div>
-          <div class="brain-info-card c-future" data-reveal="card-cortex" data-reveal-group="cortex">
-            <div class="brain-info-title">NEO CORTEX</div>
-            <div class="brain-info-age">Prefrontal expansion ~2 million years ago</div>
-            <div class="brain-info-sub">Thinking + Planning</div>
-            <div class="brain-info-desc">Language, reasoning, planning, impulse control. Present in all mammals, massively expanded in humans. Slowest to activate. First to go offline under stress.</div>
-          </div>
-        </div>
-      </div>
-    </div>`;
 }
 
 function buildGridSlide(slide) {
@@ -941,9 +595,9 @@ function buildIndexCardSlide(slide) {
   return `
     <div class="index-slide-content">
       <div class="index-headline" data-reveal="headline">${slide.title}</div>
-      <div class="slide-header" data-reveal="header" style="margin-bottom:20px">
+      <div class="slide-header" data-reveal="header" style="margin-bottom:16px">
         <div class="slide-number">INDEX /</div>
-        <div class="slide-subtitle" style="font-size:15px;color:var(--present)">Present-State Binary</div>
+        <div class="slide-subtitle" style="color:var(--present)">Present-State Binary</div>
         <div class="slide-subtitle" style="margin-top:4px">The limbic control point. Every row passes through here.</div>
       </div>
       <div class="index-box">
@@ -959,8 +613,90 @@ function buildIndexCardSlide(slide) {
         <div class="index-control-line"></div>
       </div>
       <div class="index-footer-note" data-reveal="footer-note">
-        Left column is where the limbic system keeps you.<br>Right column is where movement starts.
-        ${slide.closingLine ? `<div class="slide-tagline" style="margin-top:16px;font-size:15px;">${slide.closingLine}</div>` : ''}
+        Left column is where the limbic system keeps you. Right column is where movement starts.
+        ${slide.closingLine ? `<div class="slide-tagline" style="margin-top:14px;font-size:clamp(12px,1.4vw,15px)">${slide.closingLine}</div>` : ''}
+      </div>
+    </div>`;
+}
+
+function buildBrainSlide(slide) {
+  return `
+    <div class="slide-header" data-reveal="header">
+      <div class="slide-title">${slide.title}</div>
+      <div class="slide-subtitle">${slide.subtitle}</div>
+      ${slide.tagline ? `<div class="slide-tagline">${slide.tagline}</div>` : ''}
+    </div>
+    <div class="brain-layout">
+      <div class="brain-views">
+        <div class="brain-svg-wrap">
+          <svg viewBox="0 0 480 400" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;">
+            <g class="brain-layer" data-reveal="layer-stem" data-reveal-group="stem">
+              <path d="M218 340 Q215 320 216 300 Q217 285 220 270 M232 340 Q235 320 234 300 Q233 285 230 270" fill="none" stroke="var(--past)" stroke-width="1.2" opacity="0.4"/>
+              <path d="M210 275 Q200 260 198 245 Q196 230 198 218 Q200 208 208 202 Q215 198 225 198 Q235 198 242 202 Q250 208 252 218 Q254 230 252 245 Q250 260 240 275 Q235 282 225 285 Q215 282 210 275Z" fill="rgba(161,148,240,0.18)" stroke="var(--past)" stroke-width="1.8"/>
+              <path d="M202 230 Q195 225 194 218 Q195 212 202 208" fill="none" stroke="var(--past)" stroke-width="1" opacity="0.5"/>
+              <path d="M248 230 Q255 225 256 218 Q255 212 248 208" fill="none" stroke="var(--past)" stroke-width="1" opacity="0.5"/>
+              <path d="M215 250 Q225 245 235 250" fill="none" stroke="var(--past)" stroke-width="0.6" opacity="0.3"/>
+              <path d="M218 260 Q225 256 232 260" fill="none" stroke="var(--past)" stroke-width="0.6" opacity="0.3"/>
+              <path d="M248 210 Q270 200 282 215 Q290 230 280 248 Q270 260 255 258 Q248 252 248 240Z" fill="rgba(161,148,240,0.12)" stroke="var(--past)" stroke-width="1.2"/>
+              <path d="M258 220 Q270 218 278 225" fill="none" stroke="var(--past)" stroke-width="0.7" opacity="0.4"/>
+              <path d="M255 232 Q268 230 276 238" fill="none" stroke="var(--past)" stroke-width="0.7" opacity="0.4"/>
+              <path d="M254 244 Q264 242 272 248" fill="none" stroke="var(--past)" stroke-width="0.7" opacity="0.4"/>
+            </g>
+            <g class="brain-layer" data-reveal="layer-limbic" data-reveal-group="limbic">
+              <path d="M195 195 Q180 185 172 170 Q168 158 175 148 Q182 140 195 142 Q205 145 210 155 Q215 165 210 178 Q205 188 200 195Z" fill="rgba(240,107,106,0.2)" stroke="var(--present)" stroke-width="1.5"/>
+              <path d="M172 185 Q162 178 160 168 Q160 158 168 152 Q175 148 180 155 Q184 162 182 172 Q180 180 175 186Z" fill="rgba(240,107,106,0.25)" stroke="var(--present)" stroke-width="1.5"/>
+              <ellipse cx="220" cy="165" rx="22" ry="16" fill="rgba(240,107,106,0.15)" stroke="var(--present)" stroke-width="1.5"/>
+              <ellipse cx="210" cy="188" rx="12" ry="8" fill="rgba(240,107,106,0.2)" stroke="var(--present)" stroke-width="1.2"/>
+              <path d="M175 145 Q180 120 200 110 Q220 102 240 108 Q255 115 258 130" fill="none" stroke="var(--present)" stroke-width="2" opacity="0.6" stroke-dasharray="4 3"/>
+              <path d="M195 150 Q205 130 220 125 Q235 122 245 130" fill="none" stroke="var(--present)" stroke-width="1" opacity="0.4"/>
+              <text x="155" y="140" style="font-family:'JetBrains Mono',monospace;font-size:9px;fill:var(--present);opacity:0.6">amygdala</text>
+              <text x="186" y="128" style="font-family:'JetBrains Mono',monospace;font-size:9px;fill:var(--present);opacity:0.6">hippocampus</text>
+              <text x="220" y="170" text-anchor="middle" style="font-family:'JetBrains Mono',monospace;font-size:9px;fill:var(--present);opacity:0.6">thalamus</text>
+            </g>
+            <g class="brain-layer" data-reveal="layer-cortex" data-reveal-group="cortex">
+              <path d="M145 220 Q125 205 112 180 Q100 155 100 130 Q100 105 112 82 Q128 58 155 42 Q180 28 210 25 Q240 24 268 32 Q295 42 315 65 Q332 88 335 115 Q338 140 330 168 Q322 192 305 210 Q290 225 272 230 Q260 233 252 228" fill="rgba(60,217,160,0.07)" stroke="var(--future)" stroke-width="2"/>
+              <path d="M145 220 Q135 215 128 205 Q120 192 115 178" fill="none" stroke="var(--future)" stroke-width="1.8" opacity="0.6"/>
+              <path d="M220 35 Q215 55 218 75 Q220 90 215 105" fill="none" stroke="var(--future)" stroke-width="1.2" opacity="0.4"/>
+              <path d="M160 170 Q180 155 205 148 Q230 142 255 148" fill="none" stroke="var(--future)" stroke-width="1.2" opacity="0.4"/>
+              <path d="M175 60 Q190 50 205 48" fill="none" stroke="var(--future)" stroke-width="0.8" opacity="0.35"/>
+              <path d="M165 80 Q182 68 200 65" fill="none" stroke="var(--future)" stroke-width="0.8" opacity="0.35"/>
+              <path d="M155 100 Q172 88 192 85" fill="none" stroke="var(--future)" stroke-width="0.8" opacity="0.35"/>
+              <path d="M235 48 Q255 50 272 60" fill="none" stroke="var(--future)" stroke-width="0.8" opacity="0.35"/>
+              <path d="M240 68 Q260 70 280 82" fill="none" stroke="var(--future)" stroke-width="0.8" opacity="0.35"/>
+              <path d="M238 90 Q258 92 278 105" fill="none" stroke="var(--future)" stroke-width="0.8" opacity="0.35"/>
+              <path d="M280 120 Q300 125 318 140" fill="none" stroke="var(--future)" stroke-width="0.8" opacity="0.3"/>
+              <path d="M270 145 Q290 148 310 162" fill="none" stroke="var(--future)" stroke-width="0.8" opacity="0.3"/>
+              <path d="M140 130 Q155 120 172 118" fill="none" stroke="var(--future)" stroke-width="0.8" opacity="0.3"/>
+              <path d="M132 155 Q148 145 168 142" fill="none" stroke="var(--future)" stroke-width="0.8" opacity="0.3"/>
+              <path d="M298 185 Q312 178 325 185" fill="none" stroke="var(--future)" stroke-width="0.8" opacity="0.3"/>
+              <path d="M290 200 Q305 195 318 200" fill="none" stroke="var(--future)" stroke-width="0.8" opacity="0.3"/>
+              <text x="168" y="56" style="font-family:'JetBrains Mono',monospace;font-size:8px;fill:var(--future);opacity:0.4;letter-spacing:1px">FRONTAL</text>
+              <text x="262" y="56" style="font-family:'JetBrains Mono',monospace;font-size:8px;fill:var(--future);opacity:0.4;letter-spacing:1px">PARIETAL</text>
+              <text x="300" y="200" style="font-family:'JetBrains Mono',monospace;font-size:8px;fill:var(--future);opacity:0.4;letter-spacing:1px">OCCIPITAL</text>
+              <text x="168" y="165" style="font-family:'JetBrains Mono',monospace;font-size:8px;fill:var(--future);opacity:0.4;letter-spacing:1px">TEMPORAL</text>
+            </g>
+          </svg>
+        </div>
+        <div class="brain-info-cards">
+          <div class="brain-info-card c-past" data-reveal="card-stem" data-reveal-group="stem">
+            <div class="brain-info-title">BRAIN STEM + CEREBELLUM</div>
+            <div class="brain-info-age">~500 million years old</div>
+            <div class="brain-info-sub">Survival</div>
+            <div class="brain-info-desc">Breathing, heart rate, reflexes, balance. Automatic. No conscious input. Shared with reptiles. Always on.</div>
+          </div>
+          <div class="brain-info-card c-present" data-reveal="card-limbic" data-reveal-group="limbic">
+            <div class="brain-info-title">LIMBIC SYSTEM</div>
+            <div class="brain-info-age">~150 million years old</div>
+            <div class="brain-info-sub">Emotion + Memory</div>
+            <div class="brain-info-desc">Fear, reward, bonding, memory. Decides before you do. The gatekeeper. Shared with mammals. Runs the present.</div>
+          </div>
+          <div class="brain-info-card c-future" data-reveal="card-cortex" data-reveal-group="cortex">
+            <div class="brain-info-title">NEO CORTEX</div>
+            <div class="brain-info-age">Prefrontal expansion ~2 million years ago</div>
+            <div class="brain-info-sub">Thinking + Planning</div>
+            <div class="brain-info-desc">Language, reasoning, planning, impulse control. Present in all mammals, massively expanded in humans. First to go offline under stress.</div>
+          </div>
+        </div>
       </div>
     </div>`;
 }
@@ -992,10 +728,8 @@ function prevSlide() { goToSlide(currentSlide-1); }
 
 function revealCurrentSlide() {
   const slide = document.getElementById('slide-track').children[currentSlide];
-  // Build reveal steps: group elements by data-reveal-group, ungrouped are solo steps
   const els = slide.querySelectorAll('[data-reveal]');
-  const steps = [];
-  const grouped = new Set();
+  const steps = []; const grouped = new Set();
   els.forEach(el => {
     const group = el.getAttribute('data-reveal-group');
     if (group) {
@@ -1003,13 +737,10 @@ function revealCurrentSlide() {
         grouped.add(group);
         steps.push(Array.from(slide.querySelectorAll(`[data-reveal-group="${group}"]`)));
       }
-    } else {
-      steps.push([el]);
-    }
+    } else { steps.push([el]); }
   });
   slide._revealSteps = steps;
-  totalSteps = steps.length;
-  revealStep = 0;
+  totalSteps = steps.length; revealStep = 0;
   if (totalSteps>0) document.getElementById('tap-hint').classList.add('visible');
   revealNext();
 }
@@ -1039,8 +770,8 @@ function resetSlide() {
 
 // Events
 document.getElementById('presentation').addEventListener('click', (e) => {
-  if (e.target.closest('.nav-bar')||e.target.closest('.tap-hint')) return;
-  if (revealStep>=totalSteps) nextSlide(); else revealNext();
+  if (e.target.closest('.nav-bar') || e.target.closest('.tap-hint')) return;
+  if (revealStep >= totalSteps) nextSlide(); else revealNext();
 });
 
 let touchStartX=0, touchStartY=0, isSwiping=false;
@@ -1053,7 +784,7 @@ document.getElementById('presentation').addEventListener('touchmove', (e) => {
   if (dx>30&&dx>dy) isSwiping=true;
 }, {passive:true});
 document.getElementById('presentation').addEventListener('touchend', (e) => {
-  if (!isSwiping||e.target.closest('.nav-bar')) return;
+  if (!isSwiping || e.target.closest('.nav-bar')) return;
   const dx=e.changedTouches[0].clientX-touchStartX;
   if (dx<-50) nextSlide(); else if (dx>50) prevSlide();
 }, {passive:true});
@@ -1061,8 +792,7 @@ document.getElementById('presentation').addEventListener('touchend', (e) => {
 document.addEventListener('keydown', (e) => {
   if (!currentDeck) return;
   switch(e.key) {
-    case 'ArrowRight': case ' ':
-      e.preventDefault(); if (revealStep>=totalSteps) nextSlide(); else revealNext(); break;
+    case 'ArrowRight': case ' ': e.preventDefault(); if (revealStep>=totalSteps) nextSlide(); else revealNext(); break;
     case 'ArrowLeft': e.preventDefault(); prevSlide(); break;
     case 'ArrowDown': e.preventDefault(); revealNext(); break;
     case 'ArrowUp': e.preventDefault(); resetSlide(); break;
